@@ -1,0 +1,42 @@
+@Host_HostAddress = http://localhost:5129
+
+POST {{Host_HostAddress}}/api/expenses
+Content-Type: application/json
+{
+  "employeeId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "amount": 1112,
+  "currency": "AUD",
+  "category": 1,
+  "receiptHash": "myreceipt12"
+}
+
+###
+
+GET {{Host_HostAddress}}/api/expenses/:id
+Accept: application/json
+
+###
+
+POST {{Host_HostAddress}}/api/expenses/:id/approve
+Content-Type: application/json
+{
+  "approverId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "role": 1
+}
+
+###
+
+POST {{Host_HostAddress}}/api/expenses/:id/reject
+Content-Type: application/json
+{
+  "approverId": "2fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "role": 2,
+  "reason": "too expensive"
+}
+
+###
+
+POST {{Host_HostAddress}}/api/expenses/:id/paid
+Accept: application/json
+
+###
