@@ -23,7 +23,14 @@ public class Program
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(c=>
+        {
+            var apiAssembly = typeof(ExpenseApproval.Api.Controllers.ExpensesController).Assembly;
+            var apiXml = $"{apiAssembly.GetName().Name}.xml";
+            var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXml);
+            if (File.Exists(apiXmlPath))
+                c.IncludeXmlComments(apiXmlPath);
+        });
 
         // Register module services (Application + Infrastructure)
         SQLitePCL.Batteries.Init();
