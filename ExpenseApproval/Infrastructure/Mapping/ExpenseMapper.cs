@@ -3,13 +3,21 @@ using ExpenseApproval.Infrastructure.Stores;
 
 namespace ExpenseApproval.Infrastructure.Mapping;
 
+/// <summary>
+/// Provides methods for mapping between domain and data store representations of expenses and approval steps.
+/// </summary>
 public static class ExpenseMapper
 {
+    /// <summary>
+    /// Creates a domain model instance of an expense from the specified persisted store data.
+    /// </summary>
+    /// <param name="store">The persisted expense data to convert to a domain model.</param>
+    /// <returns>An <see cref="Expense"/> domain model populated with the data from the store.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when the provided <paramref name="store"/> is null.</exception>
     public static Expense ToDomain(ExpenseStore store)
     {
-        // You said you’re going get-only + ctor-set domain models.
-        // That means you’ll need a domain constructor/factory that accepts all persisted state.
-        // Example assumes you have something like Expense.Rehydrate(...)
+        ArgumentNullException.ThrowIfNull(store);
+
         var steps = store.ApprovalSteps
             .OrderBy(s => s.Order)
             .Select(ToDomain)
@@ -27,8 +35,16 @@ public static class ExpenseMapper
         );
     }
 
+    /// <summary>
+    /// Converts an <see cref="Expense"/> domain object to its corresponding <see cref="ExpenseStore"/> data representation.
+    /// </summary>
+    /// <param name="domain">The <see cref="Expense"/> domain object to convert.</param>
+    /// <returns>An <see cref="ExpenseStore"/> instance containing the mapped data from the specified <see cref="Expense"/> object.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if the provided <paramref name="domain"/> entity is null.</exception>
     public static ExpenseStore ToStore(Expense domain)
     {
+        ArgumentNullException.ThrowIfNull(domain);
+
         var store = new ExpenseStore
         {
             ExpenseId = domain.Id,
@@ -44,8 +60,17 @@ public static class ExpenseMapper
         return store;
     }
 
+    /// <summary>
+    /// Converts an <see cref="ApprovalStepStore"/> data object to its corresponding <see cref="ApprovalStep"/> domain
+    /// model.
+    /// </summary>
+    /// <param name="store">The data object containing approval step information to be mapped to the domain model.</param>
+    /// <returns>An <see cref="ApprovalStep"/> instance populated with values from the specified <paramref name="store"/>.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if the provided <paramref name="store"/> is null.</exception>
     public static ApprovalStep ToDomain(ApprovalStepStore store)
     {
+        ArgumentNullException.ThrowIfNull(store);
+
         return new ApprovalStep(
             id: store.Id,
             role: Enum.Parse<ApproverRole>(store.Role, ignoreCase: true),
@@ -57,8 +82,16 @@ public static class ExpenseMapper
         );
     }
 
+    /// <summary>
+    /// Converts an <see cref="ApprovalStep"/> domain object to its corresponding <see cref="ApprovalStepStore"/> data representation.
+    /// </summary>
+    /// <param name="domain">The ApprovalStep domain object to convert.</param>
+    /// <returns>An ApprovalStepStore instance containing the mapped values from the specified domain object.</returns>
+    /// <exception cref="ArgumentNullException">Thrown if the provided <paramref name="domain"/> entity is null.</exception>
     public static ApprovalStepStore ToStore(ApprovalStep domain)
     {
+        ArgumentNullException.ThrowIfNull(domain);
+
         return new ApprovalStepStore
         {
             Id = domain.Id,

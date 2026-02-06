@@ -9,12 +9,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Data.Sqlite;
 
+/// <summary>
+/// Provides extension methods for registering the ExpenseApproval module's application and infrastructure services with
+/// an ASP.NET Core dependency injection container.
+/// </summary>
 public static class ServiceCollectionExtensions
 {
     /// <summary>
     /// Registers the ExpenseApproval module (Application + Infrastructure services).
-    /// Does not register controllers (presentation concerns) - the Host should do that.
     /// </summary>
+    /// <remarks>
+    /// Does not register controllers (presentation concerns) - the Host should do that.
+    /// </remarks>
     public static IServiceCollection AddExpenseApproval(
         this IServiceCollection services,
         Action<ExpenseApprovalOptions> configure)
@@ -40,7 +46,7 @@ public static class ServiceCollectionExtensions
 
             services.AddSingleton(conn);
 
-            services.AddDbContext<AppDbContext>((sp, db) =>
+            services.AddDbContext<ExpenseApprovalDbContext>((sp, db) =>
             {
                 db.UseSqlite(sp.GetRequiredService<SqliteConnection>());
 
@@ -55,7 +61,7 @@ public static class ServiceCollectionExtensions
             if (string.IsNullOrWhiteSpace(options.ConnectionString))
                 throw new InvalidOperationException("ExpenseApprovalOptions.ConnectionString is required when not using in-memory SQLite.");
 
-            services.AddDbContext<AppDbContext>(db =>
+            services.AddDbContext<ExpenseApprovalDbContext>(db =>
             {
                 db.UseSqlite(options.ConnectionString);
 
@@ -67,6 +73,7 @@ public static class ServiceCollectionExtensions
         // -------------------------
         // Application + Domain services
         // -------------------------
+        
         // Policy contract belongs in Domain; implementation can live in Application.
         services.AddScoped<IExpensePolicy, CompanyExpensePolicy>();
 
@@ -76,12 +83,10 @@ public static class ServiceCollectionExtensions
         // Use-case service
         services.AddScoped<ExpenseService>();
 
-        // Optional read service (if you created one)
-        // services.AddScoped<ExpenseReadService>();
-
         // -------------------------
         // Startup task for schema creation (optional)
         // -------------------------
+
         if (options.EnsureCreatedOnStartup)
         {
             services.AddHostedService<ExpenseApprovalSchemaInitializer>();

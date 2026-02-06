@@ -1,5 +1,8 @@
 ﻿namespace ExpenseApproval.Infrastructure.Composition;
 
+/// <summary>
+/// Provides configuration options for the expense approval module's database and Entity Framework behavior.
+/// </summary>
 public sealed class ExpenseApprovalOptions
 {
     /// <summary>
