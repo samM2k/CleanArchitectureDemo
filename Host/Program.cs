@@ -3,8 +3,15 @@ using ExpenseApproval.Infrastructure.Composition;
 
 namespace Host;
 
+/// <summary>
+/// Provides the entry point for the CleanArchitectureDemo application.
+/// </summary>
 public class Program
 {
+    /// <summary>
+    /// Initializes and runs the ASP.NET Core web application.
+    /// </summary>
+    /// <param name="args">An array of command-line arguments provided to the application at startup.</param>
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);

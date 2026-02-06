@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ExpenseApproval.Domain;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -26,7 +28,7 @@ internal sealed class ExpenseApprovalSchemaInitializer : IHostedService
     /// <exception cref="ArgumentNullException">Thrown when the provided <paramref name="serviceProvider"/> is null.</exception>
     public ExpenseApprovalSchemaInitializer(IServiceProvider serviceProvider)
     {
-        ArgumentNullException.ThrowIfNull(serviceProvider);
+        ArgumentNullException.ThrowIfNull(serviceProvider, nameof(serviceProvider));
 
         this._serviceProvider = serviceProvider;
     }

@@ -21,7 +21,7 @@ public sealed class EfExpenseRepository : IExpenseRepository
     /// <exception cref="ArgumentNullException">Thrown when the provided <paramref name="db"/> is null.</exception>
     public EfExpenseRepository(ExpenseApprovalDbContext db)
     {
-        ArgumentNullException.ThrowIfNull(db);
+        ArgumentNullException.ThrowIfNull(db, nameof(db));
         this._db = db;
     }
 
@@ -85,7 +85,7 @@ public sealed class EfExpenseRepository : IExpenseRepository
     /// <exception cref="ArgumentNullException">Thrown if provided <paramref name="expense"/> is null.</exception>
     public async Task UpdateAsync(Expense expense, CancellationToken ct)
     {
-        ArgumentNullException.ThrowIfNull(expense);
+        ArgumentNullException.ThrowIfNull(expense, nameof(expense));
 
         var store = await this._db.Expenses
             .Include(x => x.ApprovalSteps)

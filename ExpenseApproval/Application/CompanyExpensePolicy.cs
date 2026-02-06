@@ -18,7 +18,7 @@ public sealed class CompanyExpensePolicy : IExpensePolicy
     /// <exception cref="ArgumentNullException">Thrown if the provided <paramref name="expense"/> is null.</exception>
     public void EnsureExpenseAllowed(Expense expense)
     {
-        ArgumentNullException.ThrowIfNull(expense);
+        ArgumentNullException.ThrowIfNull(expense, nameof(expense));
         if (expense.Category == ExpenseCategory.Alcohol)
             throw new DomainException("Alcohol is not reimbursable.");
     }
@@ -27,7 +27,7 @@ public sealed class CompanyExpensePolicy : IExpensePolicy
     /// <exception cref="ArgumentNullException">Thrown if the provided <paramref name="expense"/> is null.</exception>
     public IReadOnlyList<ApproverRole> RequiredApprovals(Expense expense)
     {
-        ArgumentNullException.ThrowIfNull(expense);
+        ArgumentNullException.ThrowIfNull(expense, nameof(expense));
         if (expense.Amount <= 500m) return new[] { ApproverRole.Manager };
         if (expense.Amount <= 2000m) return new[] { ApproverRole.Manager, ApproverRole.Finance };
         return new[] { ApproverRole.Manager, ApproverRole.Finance, ApproverRole.CFO };

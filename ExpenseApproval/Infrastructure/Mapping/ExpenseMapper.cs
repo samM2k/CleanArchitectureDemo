@@ -16,7 +16,7 @@ public static class ExpenseMapper
     /// <exception cref="ArgumentNullException">Thrown when the provided <paramref name="store"/> is null.</exception>
     public static Expense ToDomain(ExpenseStore store)
     {
-        ArgumentNullException.ThrowIfNull(store);
+        ArgumentNullException.ThrowIfNull(store, nameof(store));
 
         var steps = store.ApprovalSteps
             .OrderBy(s => s.Order)
@@ -43,7 +43,7 @@ public static class ExpenseMapper
     /// <exception cref="ArgumentNullException">Thrown if the provided <paramref name="domain"/> entity is null.</exception>
     public static ExpenseStore ToStore(Expense domain)
     {
-        ArgumentNullException.ThrowIfNull(domain);
+        ArgumentNullException.ThrowIfNull(domain, nameof(domain));
 
         var store = new ExpenseStore
         {
@@ -69,7 +69,7 @@ public static class ExpenseMapper
     /// <exception cref="ArgumentNullException">Thrown if the provided <paramref name="store"/> is null.</exception>
     public static ApprovalStep ToDomain(ApprovalStepStore store)
     {
-        ArgumentNullException.ThrowIfNull(store);
+        ArgumentNullException.ThrowIfNull(store, nameof(store));
 
         return new ApprovalStep(
             id: store.Id,
@@ -90,7 +90,7 @@ public static class ExpenseMapper
     /// <exception cref="ArgumentNullException">Thrown if the provided <paramref name="domain"/> entity is null.</exception>
     public static ApprovalStepStore ToStore(ApprovalStep domain)
     {
-        ArgumentNullException.ThrowIfNull(domain);
+        ArgumentNullException.ThrowIfNull(domain, nameof(domain));
 
         return new ApprovalStepStore
         {
