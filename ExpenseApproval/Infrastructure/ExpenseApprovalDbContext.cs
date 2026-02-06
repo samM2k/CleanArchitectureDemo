@@ -4,13 +4,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseApproval.Infrastructure;
 
-public sealed class AppDbContext : DbContext
+/// <summary>
+/// Represents the Entity Framework Core database context for the application's expense and approval workflow data.
+/// </summary>
+/// <remarks>This context provides access to the Expenses and ApprovalSteps tables through the corresponding DbSet
+/// properties. It is intended to be used with dependency injection and configured with the appropriate database
+/// provider and options. The context manages entity configuration, relationships, and schema mapping for expense
+/// tracking and approval processes.</remarks>
+public sealed class ExpenseApprovalDbContext : DbContext
 {
+    /// <summary>
+    /// Gets the collection of expense entities in the context.
+    /// </summary>
     public DbSet<ExpenseStore> Expenses => this.Set<ExpenseStore>();
+
+    /// <summary>
+    /// Gets the collection of approval step entities for querying and saving.
+    /// </summary>
     public DbSet<ApprovalStepStore> ApprovalSteps => this.Set<ApprovalStepStore>();
 
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExpenseApprovalDbContext"/> class using the specified options.
+    /// </summary>
+    /// <param name="options">The options to be used by the DbContext.</param>
+    public ExpenseApprovalDbContext(DbContextOptions<ExpenseApprovalDbContext> options) : base(options) { }
 
+    /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ExpenseStore>(b =>
