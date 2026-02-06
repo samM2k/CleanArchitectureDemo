@@ -28,6 +28,21 @@ public sealed class ExpensesController : ControllerBase
     }
 
     /// <summary>
+    /// Retrieves the expense record with the specified unique identifier.
+    /// </summary>
+    /// <remarks>Returns a 404 Not Found response if no expense exists with the specified identifier. This
+    /// method is intended for use in HTTP GET requests to retrieve a single expense resource.</remarks>
+    /// <param name="id">The unique identifier of the expense to retrieve.</param>
+    /// <param name="ct">A cancellation token that can be used to cancel the operation.</param>
+    /// <returns>An <see cref="IActionResult"/> containing the expense data if found; otherwise, a NotFound result.</returns>
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
+    {
+        var dto = await this._service.RetrieveExpenseAsync(id, ct);
+        return dto is null ? this.NotFound() : this.Ok(dto);
+    }
+
+    /// <summary>
     /// Creates a new expense draft using the provided <see cref="CreateExpenseRequest"/> data.
     /// </summary>
     /// <remarks>The response includes a location header pointing to the resource representing the created
@@ -101,20 +116,5 @@ public sealed class ExpensesController : ControllerBase
     {
         await this._service.MarkPaidAsync(id, ct);
         return this.Ok();
-    }
-
-    /// <summary>
-    /// Retrieves the expense record with the specified unique identifier.
-    /// </summary>
-    /// <remarks>Returns a 404 Not Found response if no expense exists with the specified identifier. This
-    /// method is intended for use in HTTP GET requests to retrieve a single expense resource.</remarks>
-    /// <param name="id">The unique identifier of the expense to retrieve.</param>
-    /// <param name="ct">A cancellation token that can be used to cancel the operation.</param>
-    /// <returns>An <see cref="IActionResult"/> containing the expense data if found; otherwise, a NotFound result.</returns>
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
-    {
-        var dto = await this._service.RetrieveExpenseAsync(id, ct);
-        return dto is null ? this.NotFound() : this.Ok(dto);
     }
 }
