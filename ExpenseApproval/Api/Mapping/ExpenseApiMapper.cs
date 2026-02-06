@@ -37,7 +37,7 @@ public static class ExpenseApiMapper
         ExpenseCategoryDto.OfficeSupplies => ExpenseCategory.OfficeSupplies,
         ExpenseCategoryDto.Alcohol => ExpenseCategory.Alcohol,
         ExpenseCategoryDto.Other => ExpenseCategory.Other,
-        _ => throw new DomainException("Expense category is required.")
+        _ => ExpenseCategory.Unspecified
     };
 
     private static ApproverRole ToDomain(ApproverRoleDto dto) => dto switch
@@ -45,6 +45,6 @@ public static class ExpenseApiMapper
         ApproverRoleDto.Manager => ApproverRole.Manager,
         ApproverRoleDto.Finance => ApproverRole.Finance,
         ApproverRoleDto.CFO => ApproverRole.CFO,
-        _ => throw new DomainException("Approver role is required.")
+        _ => ApproverRole.Unspecified
     };
 }
