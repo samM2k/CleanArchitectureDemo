@@ -4,14 +4,13 @@
 
 namespace ExpenseApproval.Infrastructure.Composition;
 
-using ExpenseApproval.Application.Commands;
 using ExpenseApproval.Application;
 using ExpenseApproval.Domain;
 using ExpenseApproval.Infrastructure.Repositories;
 
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Data.Sqlite;
 
 /// <summary>
 /// Provides extension methods for registering the ExpenseApproval module's application and infrastructure services with
