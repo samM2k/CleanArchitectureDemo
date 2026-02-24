@@ -25,5 +25,5 @@ public sealed class ExpenseApprovalOptions
     /// <summary>
     /// Optional: enable EF sensitive logging in dev.
     /// </summary>
-    public bool EnableEfSensitiveLogging { get; set; } = false;
+    public bool EnableEfSensitiveLogging { get; set; }
 }
