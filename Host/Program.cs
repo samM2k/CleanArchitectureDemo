@@ -1,7 +1,10 @@
-
-using ExpenseApproval.Infrastructure.Composition;
+// <copyright file="Program.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
 
 namespace Host;
+
+using ExpenseApproval.Infrastructure.Composition;
 
 /// <summary>
 /// Provides the entry point for the CleanArchitectureDemo application.
@@ -23,13 +26,15 @@ public class Program
 
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(c=>
+        builder.Services.AddSwaggerGen(c =>
         {
             var apiAssembly = typeof(ExpenseApproval.Api.Controllers.ExpensesController).Assembly;
             var apiXml = $"{apiAssembly.GetName().Name}.xml";
             var apiXmlPath = Path.Combine(AppContext.BaseDirectory, apiXml);
             if (File.Exists(apiXmlPath))
+            {
                 c.IncludeXmlComments(apiXmlPath);
+            }
         });
 
         // Register module services (Application + Infrastructure)
@@ -53,7 +58,6 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 
