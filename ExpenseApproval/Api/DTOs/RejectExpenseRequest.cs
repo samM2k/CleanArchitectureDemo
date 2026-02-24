@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Api.DTOs;
+﻿// <copyright file="RejectExpenseRequest.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Api.DTOs;
 
 /// <summary>
 /// Represents a request to reject an expense, including the approver's identity, role, and the reason for rejection.

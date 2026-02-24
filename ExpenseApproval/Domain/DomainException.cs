@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Domain;
+﻿// <copyright file="DomainException.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Domain;
 
 /// <summary>
 /// Represents errors that occur when a business rule or domain constraint is violated within the application domain.
@@ -12,5 +16,8 @@ public sealed class DomainException : Exception
     /// Initializes a new instance of the <see cref="DomainException"/> class with a specified error message.
     /// </summary>
     /// <param name="message">The message that describes the error.</param>
-    public DomainException(string message) : base(message) { }
+    public DomainException(string message)
+        : base(message)
+    {
+    }
 }

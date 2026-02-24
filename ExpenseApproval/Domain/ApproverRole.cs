@@ -1,9 +1,13 @@
-﻿namespace ExpenseApproval.Domain;
+﻿// <copyright file="ApproverRole.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Domain;
 
 /// <summary>
 /// Specifies the role of an approver in a financial or organizational approval workflow.
 /// </summary>
-public enum ApproverRole 
+public enum ApproverRole
 {
     /// <summary>
     /// The default nullish value, indicating that the approver role has not been specified. This value should not be used in practice and serves as a placeholder for uninitialized states.
@@ -18,10 +22,10 @@ public enum ApproverRole
     /// <summary>
     /// Represents a finance role within the organization.
     /// </summary>
-    Finance = 2, 
+    Finance = 2,
 
     /// <summary>
     /// Represents the Chief Financial Officer role within the organization.
     /// </summary>
-    CFO = 3
+    CFO = 3,
 }

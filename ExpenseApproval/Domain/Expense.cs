@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Domain;
+﻿// <copyright file="Expense.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Domain;
 
 /// <summary>
 /// Represents an expense submitted by an employee for approval and reimbursement within the organization.
@@ -6,7 +10,87 @@
 public sealed class Expense
 {
     private readonly List<ApprovalStep> _approvalSteps = new();
-    
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Expense"/> class as a draft for the specified employee with the given amount, currency, category, and
+    /// receipt hash.
+    /// </summary>
+    /// <remarks>The expense is created in the draft status and assigned a new unique identifier. Use this
+    /// constructor when submitting a new expense for an employee.</remarks>
+    /// <param name="employeeId">The unique identifier of the employee associated with the expense.</param>
+    /// <param name="amount">The monetary amount of the expense.</param>
+    /// <param name="currency">The ISO currency code representing the currency of the expense.</param>
+    /// <param name="category">The category of the expense, indicating its type or purpose.</param>
+    /// <param name="receiptHash">The hash value of the receipt associated with the expense. Used to verify receipt authenticity.</param>
+    public Expense(Guid employeeId, decimal amount, string currency, ExpenseCategory category, string receiptHash)
+        : this(Guid.NewGuid(), employeeId, amount, currency, category, receiptHash, ExpenseStatus.Draft, new())
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Expense"/> class with the specified details.
+    /// </summary>
+    /// <param name="id">The unique identifier for the expense.</param>
+    /// <param name="employeeId">The unique identifier of the employee associated with the expense.</param>
+    /// <param name="amount">The monetary amount of the expense.</param>
+    /// <param name="currency">The ISO currency code representing the currency of the expense.</param>
+    /// <param name="category">The category of the expense.</param>
+    /// <param name="receiptHash">The hash value of the expense receipt for verification purposes.</param>
+    /// <param name="status">The current status of the expense.</param>
+    /// <param name="steps">The list of approval steps required for the expense.</param>
+    /// <exception cref="DomainException">Thrown if any parameter is invalid, such as being empty, null, or unspecified.</exception>
+    public Expense(Guid id, Guid employeeId, decimal amount, string currency, ExpenseCategory category, string receiptHash, ExpenseStatus status, List<ApprovalStep> steps)
+    {
+        if (id == Guid.Empty)
+        {
+            throw new DomainException("Id is required.");
+        }
+
+        if (employeeId == Guid.Empty)
+        {
+            throw new DomainException("EmployeeId is required.");
+        }
+
+        if (amount <= 0)
+        {
+            throw new DomainException("Amount must be greater than 0.");
+        }
+
+        if (category == ExpenseCategory.Unspecified)
+        {
+            throw new DomainException("Category is required.");
+        }
+
+        if (status == ExpenseStatus.Unspecified)
+        {
+            throw new DomainException("Status is required.");
+        }
+
+        if (steps == null)
+        {
+            throw new DomainException("Steps list is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(currency))
+        {
+            throw new DomainException("Currency is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(receiptHash))
+        {
+            throw new DomainException("Receipt hash is required.");
+        }
+
+        this.Id = id;
+        this.EmployeeId = employeeId;
+        this.Amount = amount;
+        this.Currency = currency.Trim().ToUpperInvariant();
+        this.Category = category;
+        this.ReceiptHash = receiptHash.Trim();
+        this.Status = status;
+        this._approvalSteps = steps;
+    }
+
     /// <summary>
     /// Gets the unique identifier of the expense.
     /// </summary>
@@ -48,55 +132,6 @@ public sealed class Expense
     public IReadOnlyList<ApprovalStep> ApprovalSteps => this._approvalSteps;
 
     /// <summary>
-    /// Initializes a new draft expense for the specified employee with the given amount, currency, category, and
-    /// receipt hash.
-    /// </summary>
-    /// <remarks>The expense is created in the draft status and assigned a new unique identifier. Use this
-    /// constructor when submitting a new expense for an employee.</remarks>
-    /// <param name="employeeId">The unique identifier of the employee associated with the expense.</param>
-    /// <param name="amount">The monetary amount of the expense.</param>
-    /// <param name="currency">The ISO currency code representing the currency of the expense.</param>
-    /// <param name="category">The category of the expense, indicating its type or purpose.</param>
-    /// <param name="receiptHash">The hash value of the receipt associated with the expense. Used to verify receipt authenticity.</param>
-    public Expense(Guid employeeId, decimal amount, string currency, ExpenseCategory category, string receiptHash) : this(Guid.NewGuid(), employeeId, amount, currency, category, receiptHash, ExpenseStatus.Draft, new())
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the Expense class with the specified details.
-    /// </summary>
-    /// <param name="id">The unique identifier for the expense.</param>
-    /// <param name="employeeId">The unique identifier of the employee associated with the expense.</param>
-    /// <param name="amount">The monetary amount of the expense.</param>
-    /// <param name="currency">The ISO currency code representing the currency of the expense.</param>
-    /// <param name="category">The category of the expense.</param>
-    /// <param name="receiptHash">The hash value of the expense receipt for verification purposes.</param>
-    /// <param name="status">The current status of the expense.</param>
-    /// <param name="steps">The list of approval steps required for the expense.</param>
-    /// <exception cref="DomainException">Thrown if any parameter is invalid, such as being empty, null, or unspecified.</exception>
-    public Expense(Guid id, Guid employeeId, decimal amount, string currency, ExpenseCategory category, string receiptHash, ExpenseStatus status, List<ApprovalStep> steps)
-    {
-        if (id == Guid.Empty) throw new DomainException("Id is required.");
-        if (employeeId == Guid.Empty) throw new DomainException("EmployeeId is required.");
-        if (amount <= 0) throw new DomainException("Amount must be greater than 0.");
-        if (category == ExpenseCategory.Unspecified) throw new DomainException("Category is required.");
-        if(status == ExpenseStatus.Unspecified) throw new DomainException("Status is required.");
-        if (steps == null)
-            throw new DomainException("Steps list is required.");
-        if (string.IsNullOrWhiteSpace(currency)) throw new DomainException("Currency is required.");
-        if (string.IsNullOrWhiteSpace(receiptHash)) throw new DomainException("Receipt hash is required.");
-
-        this.Id = id;
-        this.EmployeeId = employeeId;
-        this.Amount = amount;
-        this.Currency = currency.Trim().ToUpperInvariant();
-        this.Category = category;
-        this.ReceiptHash = receiptHash.Trim();
-        this.Status = status;
-        this._approvalSteps = steps;
-    }
-
-    /// <summary>
     /// Submits the expense for review according to the specified policy, initiating the required approval steps.
     /// </summary>
     /// <remarks>After submission, the expense status changes to <see cref="ExpenseStatus.InReview"/> and approval steps are generated
@@ -106,18 +141,24 @@ public sealed class Expense
     public void Submit(IExpensePolicy policy)
     {
         if (this.Status != ExpenseStatus.Draft)
+        {
             throw new DomainException($"Only Draft expenses can be submitted (currently {this.Status}).");
+        }
 
         policy.EnsureExpenseAllowed(this);
 
         var roles = policy.RequiredApprovals(this);
         if (roles.Count == 0)
+        {
             throw new DomainException("Policy produced no approval steps.");
+        }
 
         this._approvalSteps.Clear();
         var order = 1;
         foreach (var role in roles)
+        {
             this._approvalSteps.Add(new ApprovalStep(role, order++));
+        }
 
         this.Status = ExpenseStatus.InReview;
     }
@@ -134,17 +175,25 @@ public sealed class Expense
     public void Approve(Guid approverId, ApproverRole role)
     {
         if (this.Status is ExpenseStatus.Rejected or ExpenseStatus.Paid)
+        {
             throw new DomainException($"Cannot approve an expense in status {this.Status}.");
+        }
 
         if (this.Status == ExpenseStatus.Draft)
+        {
             throw new DomainException("Submit the expense before approving.");
+        }
 
         var next = this._approvalSteps.OrderBy(s => s.Order).FirstOrDefault(s => s.Status == ApprovalStatus.Pending);
         if (next is null)
+        {
             throw new DomainException("No remaining approval steps.");
+        }
 
         if (next.Role != role)
+        {
             throw new DomainException($"Next required approval is {next.Role}, not {role}.");
+        }
 
         next.MarkApproved(approverId);
 
@@ -162,16 +211,26 @@ public sealed class Expense
     /// approval steps, or if the provided role does not match the next required approval step.</exception>
     public void Reject(Guid approverId, ApproverRole role, string reason)
     {
-        if (string.IsNullOrWhiteSpace(reason)) throw new DomainException("Rejection reason is required.");
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            throw new DomainException("Rejection reason is required.");
+        }
+
         if (this.Status is ExpenseStatus.Approved or ExpenseStatus.Paid)
+        {
             throw new DomainException($"Cannot reject an expense in status {this.Status}.");
+        }
 
         var next = this._approvalSteps.OrderBy(s => s.Order).FirstOrDefault(s => s.Status == ApprovalStatus.Pending);
         if (next is null)
+        {
             throw new DomainException("No remaining approval steps.");
+        }
 
         if (next.Role != role)
+        {
             throw new DomainException($"Next required approval is {next.Role}, not {role}.");
+        }
 
         next.MarkRejected(approverId, reason);
         this.Status = ExpenseStatus.Rejected;
@@ -187,7 +246,10 @@ public sealed class Expense
     public void MarkPaid()
     {
         if (this.Status != ExpenseStatus.Approved)
+        {
             throw new DomainException("Only Approved expenses can be marked as Paid.");
+        }
+
         this.Status = ExpenseStatus.Paid;
     }
 }

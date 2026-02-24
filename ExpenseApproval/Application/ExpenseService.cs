@@ -1,12 +1,14 @@
-﻿using System.Runtime.Intrinsics.Arm;
+﻿// <copyright file="ExpenseService.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Application;
 
 using ExpenseApproval.Application.Commands;
 using ExpenseApproval.Domain;
 
-namespace ExpenseApproval.Application;
-
 /// <summary>
-/// An application level service for orchestrating operations related to expense management, including creation, submission, approval, rejection, and payment processing. 
+/// An application level service for orchestrating operations related to expense management, including creation, submission, approval, rejection, and payment processing.
 /// </summary>
 /// <remarks>
 /// This service acts as a facade that encapsulates the interactions between the domain models and the data persistence layer.
@@ -17,7 +19,7 @@ public sealed class ExpenseService
     private readonly IExpensePolicy _policy;
 
     /// <summary>
-    /// Constructs a new instance of the <see cref="ExpenseService"/> class with the specified repository and policy dependencies.
+    /// Initializes a new instance of the <see cref="ExpenseService"/> class with the specified repository and policy dependencies.
     /// </summary>
     /// <param name="repo">The repository for performing CRUD operations on expenses.</param>
     /// <param name="policy">The policy for validating expenses and determining approval requirements.</param>
@@ -34,11 +36,13 @@ public sealed class ExpenseService
     /// <param name="id">The unique identifier of the expense to retrieve.</param>
     /// <param name="ct">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>A <see cref="Task"/> that represents the asynchronous operation, containing the retrieved <see cref="Expense"/> or <see langword="null"/> if not found.</returns>
-    /// <exception cref="ArgumentException">Thrown when the Expense ID is empty</exception>
+    /// <exception cref="ArgumentException">Thrown when the Expense ID is empty.</exception>
     public async Task<Expense?> RetrieveExpenseAsync(Guid id, CancellationToken ct)
     {
         if(id == Guid.Empty)
+        {
             throw new ArgumentException("Expense ID cannot be empty.", nameof(id));
+        }
 
         var expense = await this._repo.GetAsync(id, ct);
         return expense;
@@ -54,7 +58,9 @@ public sealed class ExpenseService
     public async Task<Guid> CreateDraftAsync(CreateExpenseDraftCommand command, CancellationToken ct)
     {
         if (await this._repo.ReceiptHashExistsAsync(command.ReceiptHash, ct))
+        {
             throw new DomainException("Duplicate receipt detected.");
+        }
 
         var expense = new Expense(command.EmployeeId, command.Amount, command.Currency, command.Category, command.ReceiptHash);
         await this._repo.AddAsync(expense, ct);

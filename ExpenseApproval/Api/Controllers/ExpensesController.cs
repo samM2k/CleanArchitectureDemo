@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Api.Controllers;
+﻿// <copyright file="ExpensesController.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Api.Controllers;
 
 using ExpenseApproval.Api.DTOs;
 using ExpenseApproval.Api.Mapping;
@@ -57,7 +61,7 @@ public sealed class ExpensesController : ControllerBase
         var command = ExpenseApiMapper.ToCommand(request);
         var id = await this._service.CreateDraftAsync(command, ct);
 
-        return this.CreatedAtAction(nameof(GetById), new { id }, new { id });
+        return this.CreatedAtAction(nameof(this.GetById), new { id }, new { id });
     }
 
     /// <summary>

@@ -1,9 +1,13 @@
-﻿namespace ExpenseApproval.Domain;
+﻿// <copyright file="ExpenseCategory.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Domain;
 
 /// <summary>
 /// Specifies the category of an expense for classification and reporting purposes.
 /// </summary>
-public enum ExpenseCategory 
+public enum ExpenseCategory
 {
     /// <summary>
     /// The default nullish value, indicating that the expense category has not been specified.
@@ -13,12 +17,12 @@ public enum ExpenseCategory
     /// <summary>
     /// Represents the travel expense category.
     /// </summary>
-    Travel = 1, 
+    Travel = 1,
 
     /// <summary>
     /// Represents the meals expense category.
     /// </summary>
-    Meals = 2, 
+    Meals = 2,
 
     /// <summary>
     /// Represents the office supplies expense category.
@@ -28,10 +32,10 @@ public enum ExpenseCategory
     /// <summary>
     /// Represents the alcohol expense category.
     /// </summary>
-    Alcohol = 4, 
+    Alcohol = 4,
 
     /// <summary>
     /// Represents expenses that don't fall under a specific existing category.
     /// </summary>
-    Other = 5
+    Other = 5,
 }

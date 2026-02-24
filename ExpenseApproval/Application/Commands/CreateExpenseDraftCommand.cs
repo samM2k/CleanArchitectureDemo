@@ -1,6 +1,10 @@
-﻿using ExpenseApproval.Domain;
+﻿// <copyright file="CreateExpenseDraftCommand.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
 
 namespace ExpenseApproval.Application.Commands;
+
+using ExpenseApproval.Domain;
 
 /// <summary>
 /// Represents a command to create a new expense draft for an employee.

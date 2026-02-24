@@ -1,10 +1,13 @@
-﻿using ExpenseApproval.Application;
-using ExpenseApproval.Domain;
-using ExpenseApproval.Infrastructure.Mapping;
-
-using Microsoft.EntityFrameworkCore;
+﻿// <copyright file="EfExpenseRepository.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
 
 namespace ExpenseApproval.Infrastructure.Repositories;
+
+using ExpenseApproval.Application;
+using ExpenseApproval.Domain;
+using ExpenseApproval.Infrastructure.Mapping;
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// Provides an Entity Framework Core-based implementation of the <see cref="IExpenseRepository"/> interface for managing expense
@@ -49,10 +52,12 @@ public sealed class EfExpenseRepository : IExpenseRepository
     public async Task<Expense?> GetAsync(Guid id, CancellationToken ct)
     {
         if(id == Guid.Empty)
+        {
             throw new ArgumentException("Expense ID cannot be empty.", nameof(id));
-        
+        }
+
         var store = await this._db.Expenses
-            .Include(e=>e.ApprovalSteps)
+            .Include(e => e.ApprovalSteps)
             .FirstOrDefaultAsync(x => x.ExpenseId == id, ct);
         return store is null ? null : ExpenseMapper.ToDomain(store);
     }
@@ -68,15 +73,17 @@ public sealed class EfExpenseRepository : IExpenseRepository
     public Task<bool> ReceiptHashExistsAsync(string receiptHash, CancellationToken ct)
     {
         if(string.IsNullOrWhiteSpace(receiptHash))
-            throw new ArgumentException("Rceipt hash cannot be null or whitespace.", nameof(receiptHash));
-        
+        {
+            throw new ArgumentException("Receipt hash cannot be null or whitespace.", nameof(receiptHash));
+        }
+
         return this._db.Expenses.AnyAsync(x => x.ReceiptHash == receiptHash, ct);
     }
 
     /// <summary>
     /// Asynchronously updates the specified expense and its approval steps in the database.
     /// </summary>
-    /// <remarks>All existing approval steps for the expense are replaced with those provided in the <paramref name="expense"/> 
+    /// <remarks>All existing approval steps for the expense are replaced with those provided in the <paramref name="expense"/>
     /// parameter. The operation is performed as a single database transaction.</remarks>
     /// <param name="expense">The expense to update, including its updated properties and approval steps.</param>
     /// <param name="ct">A cancellation token that can be used to cancel the update operation.</param>
@@ -92,7 +99,9 @@ public sealed class EfExpenseRepository : IExpenseRepository
             .FirstOrDefaultAsync(x => x.ExpenseId == expense.Id, ct);
 
         if (store is null)
+        {
             throw new InvalidOperationException("Cannot save: expense not found.");
+        }
 
         store.EmployeeId = expense.EmployeeId;
         store.Amount = expense.Amount;
@@ -114,7 +123,6 @@ public sealed class EfExpenseRepository : IExpenseRepository
             store.ApprovalSteps.Add(stepStore);
             this._db.Entry(stepStore).State = EntityState.Added; // <-- key line
         }
-
 
         await this._db.SaveChangesAsync(ct);
     }

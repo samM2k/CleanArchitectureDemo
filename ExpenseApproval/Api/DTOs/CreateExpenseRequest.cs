@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Api.DTOs;
+﻿// <copyright file="CreateExpenseRequest.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Api.DTOs;
 
 /// <summary>
 /// Represents a request to create a new expense entry for an employee.

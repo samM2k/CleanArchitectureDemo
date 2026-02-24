@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Infrastructure.Stores;
+﻿// <copyright file="ExpenseStore.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Infrastructure.Stores;
 
 /// <summary>
 /// Represents an expense record, as stored in the database.

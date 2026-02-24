@@ -1,4 +1,10 @@
-﻿using System;
+﻿// <copyright file="ExpenseApprovalSchemaInitializer.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Infrastructure.Composition;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +14,6 @@ using ExpenseApproval.Domain;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
-namespace ExpenseApproval.Infrastructure.Composition;
 
 /// <summary>
 /// Provides initialization of the database schema for the expense approval system when the application starts.
@@ -22,7 +26,7 @@ internal sealed class ExpenseApprovalSchemaInitializer : IHostedService
     private readonly IServiceProvider _serviceProvider;
 
     /// <summary>
-    /// Initializes a new instance of the ExpenseApprovalSchemaInitializer class using the specified service provider.
+    /// Initializes a new instance of the <see cref="ExpenseApprovalSchemaInitializer"/> class using the specified service provider.
     /// </summary>
     /// <param name="serviceProvider">The service provider used to resolve dependencies required by the schema initializer.</param>
     /// <exception cref="ArgumentNullException">Thrown when the provided <paramref name="serviceProvider"/> is null.</exception>

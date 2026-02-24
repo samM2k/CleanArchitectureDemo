@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Infrastructure.Stores;
+﻿// <copyright file="ApprovalStepStore.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Infrastructure.Stores;
 
 /// <summary>
 /// Represents a single approval step within an expense approval workflow, as stored in the database.

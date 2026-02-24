@@ -1,7 +1,11 @@
-﻿using ExpenseApproval.Domain;
-using ExpenseApproval.Infrastructure.Stores;
+﻿// <copyright file="ExpenseMapper.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
 
 namespace ExpenseApproval.Infrastructure.Mapping;
+
+using ExpenseApproval.Domain;
+using ExpenseApproval.Infrastructure.Stores;
 
 /// <summary>
 /// Provides methods for mapping between domain and data store representations of expenses and approval steps.
@@ -100,7 +104,7 @@ public static class ExpenseMapper
             Status = domain.Status.ToString(),
             ActionedBy = domain.ActionedBy,
             ActionedAt = domain.ActionedAt,
-            RejectionReason = domain.RejectionReason
+            RejectionReason = domain.RejectionReason,
         };
     }
 }

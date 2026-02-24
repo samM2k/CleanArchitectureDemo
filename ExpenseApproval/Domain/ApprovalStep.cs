@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Domain;
+﻿// <copyright file="ApprovalStep.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Domain;
 
 /// <summary>
 /// Represents a single step in an approval workflow, including its assigned role, order, status, and action details.
@@ -9,6 +13,56 @@
 /// status and action details, which are updated when the step is actioned.</remarks>
 public sealed class ApprovalStep
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ApprovalStep"/> class with the specified approver role, order, status, and
+    /// related action details.
+    /// </summary>
+    /// <param name="id">The unique identifier for the approval step.</param>
+    /// <param name="role">The role of the approver responsible for this step.</param>
+    /// <param name="order">The sequence order of this approval step within the overall approval process.</param>
+    /// <param name="status">The current status of the approval step.</param>
+    /// <param name="actionedBy">The identifier of the user who actioned this step, or null if not yet actioned.</param>
+    /// <param name="actionedAt">The date and time when this step was actioned, or null if not yet actioned.</param>
+    /// <param name="rejectionReason">The reason for rejection, if the step was rejected; otherwise, null.</param>
+    /// <exception cref="DomainException">Thrown if <paramref name="id"/> is empty, <paramref name="role"/> is <see cref="ApproverRole.Unspecified"/> or <paramref name="order"/> is negative.</exception>
+    public ApprovalStep(Guid id, ApproverRole role, int order, ApprovalStatus status, Guid? actionedBy, DateTimeOffset? actionedAt, string? rejectionReason)
+    {
+        if (id == Guid.Empty)
+        {
+            throw new DomainException("Id is required.");
+        }
+
+        if (role == ApproverRole.Unspecified)
+        {
+            throw new DomainException("Role is required.");
+        }
+
+        if (order < 0)
+        {
+            throw new DomainException("Order must be non-negative.");
+        }
+
+        this.Id = id;
+        this.Role = role;
+        this.Order = order;
+        this.Status = status;
+        this.ActionedBy = actionedBy;
+        this.ActionedAt = actionedAt;
+        this.RejectionReason = rejectionReason;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ApprovalStep"/> class with the specified approver role and step order, setting
+    /// the status to pending.
+    /// </summary>
+    /// <param name="role">The role of the approver responsible for this approval step.</param>
+    /// <param name="order">The sequence order of this step within the approval process.</param>
+    /// <exception cref="DomainException">Thrown if <paramref name="role"/> is <see cref="ApproverRole.Unspecified"/> or <paramref name="order"/> is negative.</exception>
+    public ApprovalStep(ApproverRole role, int order)
+        : this(Guid.NewGuid(), role, order, ApprovalStatus.Pending, null, null, null)
+    {
+    }
+
     /// <summary>
     /// Gets the unique identifier for the approval step.
     /// </summary>
@@ -56,52 +110,21 @@ public sealed class ApprovalStep
     public bool IsRejected => this.Status == ApprovalStatus.Rejected;
 
     /// <summary>
-    /// Initializes a new instance of the ApprovalStep class with the specified approver role, order, status, and
-    /// related action details.
-    /// </summary>
-    /// <param name="id">The unique identifier for the approval step.</param>
-    /// <param name="role">The role of the approver responsible for this step.</param>
-    /// <param name="order">The sequence order of this approval step within the overall approval process.</param>
-    /// <param name="status">The current status of the approval step.</param>
-    /// <param name="actionedBy">The identifier of the user who actioned this step, or null if not yet actioned.</param>
-    /// <param name="actionedAt">The date and time when this step was actioned, or null if not yet actioned.</param>
-    /// <param name="rejectionReason">The reason for rejection, if the step was rejected; otherwise, null.</param>
-    /// <exception cref="DomainException">Thrown if <paramref name="id"/> is empty, <paramref name="role"/> is <see cref="ApproverRole.Unspecified"/> or <paramref name="order"/> is negative.</exception>
-    public ApprovalStep(Guid id, ApproverRole role, int order, ApprovalStatus status, Guid? actionedBy, DateTimeOffset? actionedAt, string? rejectionReason)
-    {
-        if (id == Guid.Empty) throw new DomainException("Id is required.");
-        if (role == ApproverRole.Unspecified) throw new DomainException("Role is required.");
-        if(order < 0) throw new DomainException("Order must be non-negative.");
-
-        this.Id = id;
-        this.Role = role;
-        this.Order = order;
-        this.Status = status;
-        this.ActionedBy = actionedBy;
-        this.ActionedAt = actionedAt;
-        this.RejectionReason = rejectionReason;
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the ApprovalStep class with the specified approver role and step order, setting
-    /// the status to pending.
-    /// </summary>
-    /// <param name="role">The role of the approver responsible for this approval step.</param>
-    /// <param name="order">The sequence order of this step within the approval process.</param>
-    /// <exception cref="DomainException">Thrown if <paramref name="role"/> is <see cref="ApproverRole.Unspecified"/> or <paramref name="order"/> is negative.</exception>
-    public ApprovalStep(ApproverRole role, int order) : this(Guid.NewGuid(), role, order, ApprovalStatus.Pending, null, null, null)
-    {
-    }
-
-    /// <summary>
     /// Marks the approval step as approved by the specified approver.
     /// </summary>
     /// <param name="approverId">The unique identifier of the user who is approving the step.</param>
     /// <exception cref="DomainException">Thrown if <paramref name="approverId"/> is empty or if the approval step has already been actioned.</exception>
     public void MarkApproved(Guid approverId)
     {
-        if (approverId == Guid.Empty) throw new DomainException("ApproverId is required.");
-        if (this.Status != ApprovalStatus.Pending) throw new DomainException("Step already actioned.");
+        if (approverId == Guid.Empty)
+        {
+            throw new DomainException("ApproverId is required.");
+        }
+
+        if (this.Status != ApprovalStatus.Pending)
+        {
+            throw new DomainException("Step already actioned.");
+        }
 
         this.Status = ApprovalStatus.Approved;
         this.ActionedBy = approverId;
@@ -117,9 +140,20 @@ public sealed class ApprovalStep
     /// the approval step has already been actioned.</exception>
     public void MarkRejected(Guid approverId, string reason)
     {
-        if (approverId == Guid.Empty) throw new DomainException("ApproverId is required.");
-        if (string.IsNullOrWhiteSpace(reason)) throw new DomainException("Reason is required.");
-        if (this.Status != ApprovalStatus.Pending) throw new DomainException("Step already actioned.");
+        if (approverId == Guid.Empty)
+        {
+            throw new DomainException("ApproverId is required.");
+        }
+
+        if (string.IsNullOrWhiteSpace(reason))
+        {
+            throw new DomainException("Reason is required.");
+        }
+
+        if (this.Status != ApprovalStatus.Pending)
+        {
+            throw new DomainException("Step already actioned.");
+        }
 
         this.Status = ApprovalStatus.Rejected;
         this.RejectionReason = reason.Trim();
