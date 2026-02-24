@@ -74,7 +74,7 @@ public sealed class EfExpenseRepository : IExpenseRepository
     {
         if(string.IsNullOrWhiteSpace(receiptHash))
         {
-            throw new ArgumentException("Rceipt hash cannot be null or whitespace.", nameof(receiptHash));
+            throw new ArgumentException("Receipt hash cannot be null or whitespace.", nameof(receiptHash));
         }
 
         return this._db.Expenses.AnyAsync(x => x.ReceiptHash == receiptHash, ct);
