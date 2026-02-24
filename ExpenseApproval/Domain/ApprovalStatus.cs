@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Domain;
+﻿// <copyright file="ApprovalStatus.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Domain;
 
 /// <summary>
 /// Specifies the status of an approval step.
@@ -23,5 +27,5 @@ public enum ApprovalStatus
     /// <summary>
     /// Indicates that the approval step has been been actioned with approval.
     /// </summary>
-    Approved = 3
+    Approved = 3,
 }

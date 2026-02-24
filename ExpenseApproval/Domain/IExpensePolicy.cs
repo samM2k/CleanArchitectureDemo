@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Domain;
+﻿// <copyright file="IExpensePolicy.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Domain;
 
 /// <summary>
 /// Defines the contract for evaluating whether an expense is permitted and determining the required approval roles for
