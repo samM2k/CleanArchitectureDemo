@@ -1,4 +1,8 @@
-﻿namespace ExpenseApproval.Infrastructure.Composition;
+﻿// <copyright file="ServiceCollectionExtensions.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
+
+namespace ExpenseApproval.Infrastructure.Composition;
 
 using ExpenseApproval.Application.Commands;
 using ExpenseApproval.Application;
@@ -21,6 +25,9 @@ public static class ServiceCollectionExtensions
     /// <remarks>
     /// Does not register controllers (presentation concerns) - the Host should do that.
     /// </remarks>
+    /// <param name="services">The service collection to add the ExpenseApproval services to.</param>
+    /// <param name="configure">Configuration action for ExpenseApprovalOptions, which controls various aspects of the module's setup (e.g. whether to use in-memory SQLite or a real database).</param>
+    /// <returns>The <see cref="IServiceCollection"/>.</returns>
     public static IServiceCollection AddExpenseApproval(
         this IServiceCollection services,
         Action<ExpenseApprovalOptions> configure)
@@ -51,7 +58,9 @@ public static class ServiceCollectionExtensions
                 db.UseSqlite(sp.GetRequiredService<SqliteConnection>());
 
                 if (options.EnableEfSensitiveLogging)
+                {
                     db.EnableSensitiveDataLogging();
+                }
 
                 db.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
             });
@@ -59,21 +68,25 @@ public static class ServiceCollectionExtensions
         else
         {
             if (string.IsNullOrWhiteSpace(options.ConnectionString))
+            {
                 throw new InvalidOperationException("ExpenseApprovalOptions.ConnectionString is required when not using in-memory SQLite.");
+            }
 
             services.AddDbContext<ExpenseApprovalDbContext>(db =>
             {
                 db.UseSqlite(options.ConnectionString);
 
                 if (options.EnableEfSensitiveLogging)
+                {
                     db.EnableSensitiveDataLogging();
+                }
             });
         }
 
         // -------------------------
         // Application + Domain services
         // -------------------------
-        
+
         // Policy contract belongs in Domain; implementation can live in Application.
         services.AddScoped<IExpensePolicy, CompanyExpensePolicy>();
 
@@ -86,7 +99,6 @@ public static class ServiceCollectionExtensions
         // -------------------------
         // Startup task for schema creation (optional)
         // -------------------------
-
         if (options.EnsureCreatedOnStartup)
         {
             services.AddHostedService<ExpenseApprovalSchemaInitializer>();

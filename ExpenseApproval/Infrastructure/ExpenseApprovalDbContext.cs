@@ -1,8 +1,12 @@
-﻿using ExpenseApproval.Infrastructure.Stores;
-
-using Microsoft.EntityFrameworkCore;
+﻿// <copyright file="ExpenseApprovalDbContext.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
 
 namespace ExpenseApproval.Infrastructure;
+
+using ExpenseApproval.Infrastructure.Stores;
+
+using Microsoft.EntityFrameworkCore;
 
 /// <summary>
 /// Represents the Entity Framework Core database context for the application's expense and approval workflow data.
@@ -14,6 +18,15 @@ namespace ExpenseApproval.Infrastructure;
 public sealed class ExpenseApprovalDbContext : DbContext
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="ExpenseApprovalDbContext"/> class using the specified options.
+    /// </summary>
+    /// <param name="options">The options to be used by the DbContext.</param>
+    public ExpenseApprovalDbContext(DbContextOptions<ExpenseApprovalDbContext> options)
+        : base(options)
+    {
+    }
+
+    /// <summary>
     /// Gets the collection of expense entities in the context.
     /// </summary>
     public DbSet<ExpenseStore> Expenses => this.Set<ExpenseStore>();
@@ -22,12 +35,6 @@ public sealed class ExpenseApprovalDbContext : DbContext
     /// Gets the collection of approval step entities for querying and saving.
     /// </summary>
     public DbSet<ApprovalStepStore> ApprovalSteps => this.Set<ApprovalStepStore>();
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ExpenseApprovalDbContext"/> class using the specified options.
-    /// </summary>
-    /// <param name="options">The options to be used by the DbContext.</param>
-    public ExpenseApprovalDbContext(DbContextOptions<ExpenseApprovalDbContext> options) : base(options) { }
 
     /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
