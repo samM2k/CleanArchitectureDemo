@@ -1,8 +1,12 @@
-﻿using ExpenseApproval.Api.DTOs;
-using ExpenseApproval.Application.Commands;
-using ExpenseApproval.Domain;
+﻿// <copyright file="ExpenseApiMapper.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
 
 namespace ExpenseApproval.Api.Mapping;
+
+using ExpenseApproval.Api.DTOs;
+using ExpenseApproval.Application.Commands;
+using ExpenseApproval.Domain;
 
 /// <summary>
 /// Provides mapping functions to convert API request objects into domain command objects for expense operations.
@@ -19,7 +23,7 @@ public static class ExpenseApiMapper
     public static CreateExpenseDraftCommand ToCommand(CreateExpenseRequest request)
     {
         ArgumentNullException.ThrowIfNull(request, nameof(request));
-        
+
         return new(
             EmployeeId: request.EmployeeId,
             Amount: request.Amount,
@@ -41,8 +45,10 @@ public static class ExpenseApiMapper
     public static ApproveExpenseCommand ToCommand(Guid expenseId, ApproveExpenseRequest request)
     {
         if(expenseId == Guid.Empty)
+        {
             throw new ArgumentException("Expense ID cannot be empty.", nameof(expenseId));
-        
+        }
+
         ArgumentNullException.ThrowIfNull(request, nameof(request));
 
         return new(
@@ -63,8 +69,10 @@ public static class ExpenseApiMapper
     public static RejectExpenseCommand ToCommand(Guid expenseId, RejectExpenseRequest request)
     {
         if(expenseId == Guid.Empty)
+        {
             throw new ArgumentException("Expense ID cannot be empty.", nameof(expenseId));
-        
+        }
+
         ArgumentNullException.ThrowIfNull(request, nameof(request));
 
         return new(
@@ -82,7 +90,7 @@ public static class ExpenseApiMapper
         ExpenseCategoryDto.OfficeSupplies => ExpenseCategory.OfficeSupplies,
         ExpenseCategoryDto.Alcohol => ExpenseCategory.Alcohol,
         ExpenseCategoryDto.Other => ExpenseCategory.Other,
-        _ => ExpenseCategory.Unspecified
+        _ => ExpenseCategory.Unspecified,
     };
 
     private static ApproverRole ToDomain(ApproverRoleDto dto) => dto switch
@@ -90,6 +98,6 @@ public static class ExpenseApiMapper
         ApproverRoleDto.Manager => ApproverRole.Manager,
         ApproverRoleDto.Finance => ApproverRole.Finance,
         ApproverRoleDto.CFO => ApproverRole.CFO,
-        _ => ApproverRole.Unspecified
+        _ => ApproverRole.Unspecified,
     };
 }
