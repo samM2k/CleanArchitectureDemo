@@ -1,6 +1,10 @@
-﻿using ExpenseApproval.Domain;
+﻿// <copyright file="ApproveExpenseCommand.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
 
 namespace ExpenseApproval.Application.Commands;
+
+using ExpenseApproval.Domain;
 
 /// <summary>
 /// Represents a command to approve an expense by a specified approver and role.

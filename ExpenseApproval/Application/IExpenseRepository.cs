@@ -1,6 +1,10 @@
-﻿using ExpenseApproval.Domain;
+﻿// <copyright file="IExpenseRepository.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
 
 namespace ExpenseApproval.Application;
+
+using ExpenseApproval.Domain;
 
 /// <summary>
 /// Defines a contract for CRUD operations relating to <see cref="Expense"/> entities against a data persistence mechanism.

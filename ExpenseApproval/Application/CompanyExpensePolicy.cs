@@ -1,6 +1,10 @@
-﻿using ExpenseApproval.Domain;
+﻿// <copyright file="CompanyExpensePolicy.cs" company="CleanArchitectureDemoCompany">
+// Copyright (c) CleanArchitectureDemoCompany. All rights reserved.
+// </copyright>
 
 namespace ExpenseApproval.Application;
+
+using ExpenseApproval.Domain;
 
 /// <summary>
 /// A company's expense policy, an organisation-specific implementation of <see cref="IExpensePolicy"/> that defines the rules for expense validation and approval requirements based on company guidelines.
@@ -20,7 +24,9 @@ public sealed class CompanyExpensePolicy : IExpensePolicy
     {
         ArgumentNullException.ThrowIfNull(expense, nameof(expense));
         if (expense.Category == ExpenseCategory.Alcohol)
+        {
             throw new DomainException("Alcohol is not reimbursable.");
+        }
     }
 
     /// <inheritdoc/>
@@ -28,8 +34,16 @@ public sealed class CompanyExpensePolicy : IExpensePolicy
     public IReadOnlyList<ApproverRole> RequiredApprovals(Expense expense)
     {
         ArgumentNullException.ThrowIfNull(expense, nameof(expense));
-        if (expense.Amount <= 500m) return new[] { ApproverRole.Manager };
-        if (expense.Amount <= 2000m) return new[] { ApproverRole.Manager, ApproverRole.Finance };
+        if (expense.Amount <= 500m)
+        {
+            return new[] { ApproverRole.Manager };
+        }
+
+        if (expense.Amount <= 2000m)
+        {
+            return new[] { ApproverRole.Manager, ApproverRole.Finance };
+        }
+
         return new[] { ApproverRole.Manager, ApproverRole.Finance, ApproverRole.CFO };
     }
 }
